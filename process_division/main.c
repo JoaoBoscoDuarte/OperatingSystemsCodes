@@ -16,8 +16,7 @@ int main(int argc, char *argv[])
     if (n1 == 0) {
       // Processo N1 executa comando
       execl("/bin/ls", "ls", "-la", NULL);
-      perror("execl falhou");
-      return 1;
+      printf("\n");
     }
 
     n2 = fork();
@@ -25,16 +24,15 @@ int main(int argc, char *argv[])
     if (n2 == 0) {
       // Processo N2 executa comando
       execl("/bin/pwd", "pwd", NULL);
-      perror("execl falhou");
-      return 1;
     }
 
     // F1 aguarda N1 e N2
     wait(NULL);
     wait(NULL);
-
-    printf("Processo filho F1\n");
+    
+    printf("\n--- Processo filho F1 ---\n");
     printf("PID: %d, PID do pai: %d\n", getpid(), getppid());
+    printf("\n");
     return 0;
   }
 
@@ -47,25 +45,22 @@ int main(int argc, char *argv[])
     
     if (n3 == 0) {
       // Processo N3 executa comando
-      execl("/bin/date", "date", NULL);
-      perror("execl falhou");
-      return 1;
+      execl("/bin/sh", "sh", "-c", "top -b -n 1 | head -n 17", NULL);
     }
 
     n4 = fork();
     
     if (n4 == 0) {
       // Processo N4 executa comando
-      execl("/usr/bin/whoami", "whoami", NULL);
-      perror("execl falhou");
-      return 1;
+      execl("/bin/ps", "ps", NULL);
     }
 
     // F2 aguarda N3 e N4
     wait(NULL);
     wait(NULL);
 
-    printf("Processo filho F2\n");
+    printf("\n");
+    printf("\n--- Processo filho F2 ---\n");
     printf("PID: %d, PID do pai: %d\n", getpid(), getppid());
     return 0;
   }
@@ -74,6 +69,7 @@ int main(int argc, char *argv[])
   wait(NULL);
   wait(NULL);
 
+  printf("\n");
   printf("Processo pai P1\n");
   printf("PID: %d\n", getpid());
   printf("Programa encerrado.\n");
