@@ -6,6 +6,10 @@
 #define N 10000
 #define MAX_VAL 100
 
+double resultado_media;
+double resultado_mediana;
+double resultado_desvio;
+
 // Função básica para calcular a média
 double media(int numeros[]) {
   long int soma = 0;
@@ -18,16 +22,13 @@ double media(int numeros[]) {
 }
 
 // Método de ordenação couting sort para ordenar a lista antes de calcular a mediana 
-// mais eficiente para a ordenação desse tipo de estrutura (busca quase linear)
 void counting_sort(int arr[]) {
     int contagem[MAX_VAL + 1] = {0};
 
-    // Conta as ocorrências
     for (int i = 0; i < N; i++) {
         contagem[arr[i]]++;
     }
 
-    // Reconstrói o array ordenado
     int index = 0;
     for (int valor = 0; valor <= MAX_VAL; valor++) {
         for (int j = 0; j < contagem[valor]; j++) {
@@ -38,6 +39,7 @@ void counting_sort(int arr[]) {
 
 // Função para calcular a mediana
 double mediana(int numeros[]) {
+  counting_sort(numeros);
   return (numeros[4999] + numeros[5000]) / 2.0;
 }
 
@@ -51,7 +53,7 @@ double desvio_padrao(int v[]) {
         soma_quadrados += diff * diff;
     }
 
-    double variancia = soma_quadrados / N;   // desvio padrão populacional
+    double variancia = soma_quadrados / N;
     return sqrt(variancia);
 }
 
@@ -64,17 +66,30 @@ void gerador_numeros(int numeros[]) {
 
 int main(int argc, char const *argv[])
 {
-  srand(time(NULL));  // Inicializa gerador de números aleatórios
+  srand(time(NULL));
   
-  // Define e gera uma lista de números inteiros
   int numeros[N];
   gerador_numeros(numeros);
 
-  // Ordena a lista de numeros
-  counting_sort(numeros);
+  clock_t inicio = clock();
 
-  printf("Média: %f\n", media(numeros));
-  printf("Mediana: %f\n", mediana(numeros));
-  printf("Desvio Padrão: %f\n", desvio_padrao(numeros));
+  // Calcula média
+  resultado_media = media(numeros);
+
+  // Calcula mediana (ordena internamente)
+  resultado_mediana = mediana(numeros);
+
+  // Calcula desvio padrão
+  resultado_desvio = desvio_padrao(numeros);
+
+  clock_t fim = clock();
+  double tempo_execucao = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+
+  printf("=== VERSÃO COM 1 THREAD (SEQUENCIAL) ===\n");
+  printf("Média: %.2f\n", resultado_media);
+  printf("Mediana: %.2f\n", resultado_mediana);
+  printf("Desvio Padrão: %.2f\n", resultado_desvio);
+  printf("Tempo de execução: %.6f segundos\n", tempo_execucao);
+  
   return 0;
 }
