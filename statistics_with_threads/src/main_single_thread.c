@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <pthread.h>
 
 #define N 10000
 #define MAX_VAL 100
 
+int numeros[N];
 double resultado_media;
 double resultado_mediana;
 double resultado_desvio;
@@ -64,20 +66,30 @@ void gerador_numeros(int numeros[]) {
   }
 }
 
+// Thread que executa todos os cálculos sequencialmente
+void* thread_calculos(void* arg __attribute__((unused))) {
+  resultado_media = media(numeros);
+  resultado_mediana = mediana(numeros);
+  resultado_desvio = desvio_padrao(numeros);
+  return NULL;
+}
+
 int main(void)
 {
   srand(time(NULL));
   
-  int numeros[N];
   // Thread principal gera a lista de números
   gerador_numeros(numeros);
 
+  pthread_t thread;
+  
   clock_t inicio = clock();
-
-  // Calcula os resultados
-  resultado_media = media(numeros);
-  resultado_mediana = mediana(numeros);
-  resultado_desvio = desvio_padrao(numeros);
+  
+  // Cria thread para executar os cálculos
+  pthread_create(&thread, NULL, thread_calculos, NULL);
+  
+  // Aguarda thread terminar
+  pthread_join(thread, NULL);
 
   clock_t fim = clock();
   double tempo_execucao = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
