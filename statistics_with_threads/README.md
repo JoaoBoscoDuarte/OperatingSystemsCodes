@@ -1,10 +1,5 @@
 # Estatísticas com Threads e Processos
 
-**Autor:** Bosco  
-**Disciplina:** Sistemas Operacionais - 2024
-
----
-
 ## Sumário
 
 1. [Objetivo](#objetivo)
