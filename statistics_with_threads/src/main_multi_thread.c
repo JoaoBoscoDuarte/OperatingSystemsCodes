@@ -38,7 +38,7 @@ void gerador_numeros(int numeros[]) {
 }
 
 // Thread 1: Calcula média
-void* thread_media(void* arg) {
+void* thread_media(void* arg __attribute__((unused))) {
   long int soma = 0;
 
   for (int i = 0; i < N; i++) {
@@ -50,14 +50,14 @@ void* thread_media(void* arg) {
 }
 
 // Thread 2: Calcula mediana (ordena internamente)
-void* thread_mediana(void* arg) {
+void* thread_mediana(void* arg __attribute__((unused))) {
     counting_sort(numeros_copia);
     resultado_mediana = (numeros_copia[4999] + numeros_copia[5000]) / 2.0;
     return NULL;
 }
 
 // Thread 3: Calcula desvio padrão
-void* thread_desvio(void* arg) {
+void* thread_desvio(void* arg __attribute__((unused))) {
     long int soma = 0;
     for (int i = 0; i < N; i++) {
         soma += numeros[i];
@@ -74,7 +74,7 @@ void* thread_desvio(void* arg) {
     return NULL;
 }
 
-int main(int argc, char const *argv[])
+int main(void)
 {
   srand(time(NULL));
   

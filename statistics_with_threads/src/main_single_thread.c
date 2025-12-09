@@ -64,7 +64,7 @@ void gerador_numeros(int numeros[]) {
   }
 }
 
-int main(int argc, char const *argv[])
+int main(void)
 {
   srand(time(NULL));
   
